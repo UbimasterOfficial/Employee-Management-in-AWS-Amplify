@@ -1,0 +1,24 @@
+{
+  "name": "node-user-crud-api",
+  "version": "1.0.0",
+  "description": "Simple Node.js CRUD API with MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon -L server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "crud"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.14"
+  }
+}
