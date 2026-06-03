@@ -229,10 +229,10 @@ export default function App() {
 
       <header className="topbar">
         <div className="brand">
-          <div className="brand__logo">WH</div>
+          <div className="brand__logo">EO</div>
           <div>
             <p className="brand__eyebrow">Workforce Management</p>
-            <h1 className="brand__title">WorkforceHub</h1>
+            <h1 className="brand__title">EmployeeOne</h1>
           </div>
         </div>
         <button className="btn btn--outline" onClick={fetchEmployees} disabled={loading} type="button">

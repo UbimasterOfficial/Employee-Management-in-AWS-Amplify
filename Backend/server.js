@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const userRoutes = require("./user");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 app.use(cors());
@@ -30,7 +30,7 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on port: ${PORT}`);
     });
   })
   .catch((error) => {
