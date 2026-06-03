@@ -1,4 +1,9 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/users";
+const DEFAULT_DEV_API = "http://localhost:5001/api/users";
+const DEFAULT_PROD_API = "http://100.29.211.141:5001/api/users";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? DEFAULT_DEV_API : DEFAULT_PROD_API);
 
 async function handleResponse(response) {
   if (!response.ok) {

@@ -9,7 +9,34 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
-app.use(cors());
+const extraCorsOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  : [];
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      const allowedPatterns = [
+        /^http:\/\/localhost(:\d+)?$/,
+        /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+        /^https:\/\/.*\.amplifyapp\.com$/,
+        ...extraCorsOrigins.map((entry) =>
+          entry.startsWith("/") && entry.endsWith("/")
+            ? new RegExp(entry.slice(1, -1))
+            : entry
+        ),
+      ];
+      const allowed = allowedPatterns.some((entry) =>
+        entry instanceof RegExp ? entry.test(origin) : entry === origin
+      );
+      if (allowed || process.env.CORS_STRICT !== "true") {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
