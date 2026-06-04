@@ -3,3 +3,4 @@ node_modules
 .env.local
 .env.*.local
 AWS
+My_Ness_Things.txt
