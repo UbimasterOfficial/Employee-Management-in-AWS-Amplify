@@ -46,40 +46,43 @@ export default function App() {
   const [toast, setToast] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
+  const employeeList = Array.isArray(employees) ? employees : [];
+
   const selectedEmployee = useMemo(
-    () => employees.find((employee) => employee._id === selectedId),
-    [employees, selectedId]
+    () => employeeList.find((employee) => employee._id === selectedId),
+    [employeeList, selectedId]
   );
 
   const filteredEmployees = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return employees;
-    return employees.filter(
+    if (!query) return employeeList;
+    return employeeList.filter(
       (employee) =>
         employee.name?.toLowerCase().includes(query) ||
         employee.email?.toLowerCase().includes(query)
     );
-  }, [employees, search]);
+  }, [employeeList, search]);
 
   const averageAge = useMemo(() => {
-    const withAge = employees.filter((e) => typeof e.age === "number");
+    const withAge = employeeList.filter((e) => typeof e.age === "number");
     if (!withAge.length) return null;
     const total = withAge.reduce((sum, e) => sum + e.age, 0);
     return Math.round(total / withAge.length);
-  }, [employees]);
+  }, [employeeList]);
 
   async function fetchEmployees() {
     setLoading(true);
     setError("");
     try {
       const data = await getEmployees();
-      setEmployees(data);
-      if (data.length && !selectedId) {
-        setSelectedId(data[0]._id);
-      } else if (!data.length) {
+      const list = Array.isArray(data) ? data : [];
+      setEmployees(list);
+      if (list.length && !selectedId) {
+        setSelectedId(list[0]._id);
+      } else if (!list.length) {
         setSelectedId("");
-      } else if (selectedId && !data.some((item) => item._id === selectedId)) {
-        setSelectedId(data[0]?._id || "");
+      } else if (selectedId && !list.some((item) => item._id === selectedId)) {
+        setSelectedId(list[0]?._id || "");
       }
     } catch (fetchError) {
       setError(fetchError.message);
@@ -244,7 +247,7 @@ export default function App() {
       <section className="stats">
         <article className="stat-card stat-card--primary">
           <span className="stat-card__label">Total Employees</span>
-          <strong className="stat-card__value">{employees.length}</strong>
+          <strong className="stat-card__value">{employeeList.length}</strong>
         </article>
         <article className="stat-card stat-card--accent">
           <span className="stat-card__label">Average Age</span>
@@ -365,7 +368,7 @@ export default function App() {
             </div>
           </div>
 
-          {loading && !employees.length ? (
+          {loading && !employeeList.length ? (
             <div className="skeleton-list">
               {[1, 2, 3].map((item) => (
                 <div key={item} className="skeleton-row" />

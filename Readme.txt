@@ -17,6 +17,10 @@ Production backend (EC2 + Elastic IP)
 -------------------------------------
     http://100.29.211.141:5001/api/users
 
+Backend Host name;
+    https://employeecrud.ddns.net
+     SSL certificate expires on 2026-09-02
+
 Frontend API configuration
 ----------------------------
 The React app reads VITE_API_URL (must include /api/users).
