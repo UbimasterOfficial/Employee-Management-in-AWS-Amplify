@@ -1,4 +1,17 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/users";
+const DEFAULT_DEV_API = "http://localhost:5001/api/users";
+const DEFAULT_PROD_API = "http://100.29.211.141:5001/api/users";
+const USERS_PATH = "/api/users";
+
+function resolveApiBaseUrl(url) {
+  const trimmed = url.trim().replace(/\/+$/, "");
+  if (trimmed.endsWith(USERS_PATH)) return trimmed;
+  return `${trimmed}${USERS_PATH}`;
+}
+
+const API_BASE_URL = resolveApiBaseUrl(
+  import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? DEFAULT_DEV_API : DEFAULT_PROD_API)
+);
 
 async function handleResponse(response) {
   if (!response.ok) {
@@ -14,8 +27,23 @@ async function handleResponse(response) {
   return response.json();
 }
 
+function normalizeEmployeeList(data) {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.users)) return data.users;
+  if (data && Array.isArray(data.data)) return data.data;
+  const hint =
+    data && typeof data.message === "string"
+      ? ` Server replied: "${data.message}".`
+      : "";
+  throw new Error(
+    `Expected a list of employees from the API.${hint} Requested: ${API_BASE_URL}`
+  );
+}
+
 export function getEmployees() {
-  return fetch(API_BASE_URL).then(handleResponse);
+  return fetch(API_BASE_URL)
+    .then(handleResponse)
+    .then(normalizeEmployeeList);
 }
 
 export function getEmployeeById(id) {
