@@ -31,9 +31,11 @@ AWS Amplify deployment
 2. Set "Monorepo" app root to: Frontend
    (amplify.yml is already under Frontend/ with appRoot: Frontend)
 3. Build uses amplify.yml; default API URL is the EC2 Elastic IP above.
-4. After first deploy, set backend CORS on EC2 if needed:
-       CORS_ORIGINS=http://localhost:5173,https://YOUR_BRANCH.amplifyapp.com
-   Or add your Amplify URL to the list in Backend/server.js patterns.
+4. Backend CORS (Backend/server.js) allows:
+       https://frontend-dev.d173bi0k0a6t1i.amplifyapp.com
+   and any https://*.amplifyapp.com URL. On EC2 you can also set:
+       AMPLIFY_FRONTEND_URL=https://frontend-dev.d173bi0k0a6t1i.amplifyapp.com
+   Redeploy/restart the backend after pulling these changes.
 
 EC2 / security checklist
 ------------------------
