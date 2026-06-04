@@ -7,7 +7,7 @@ applications:
             - npm ci --cache .npm --prefer-offline
         build:
           commands:
-            # Override in Amplify Console → Environment variables → VITE_API_URL
+            # VITE_API_URL: backend host or full .../api/users (auto-appended in src/api.js)
             - export VITE_API_URL=${VITE_API_URL:-http://100.29.211.141:5001/api/users}
             - npm run build
       artifacts:

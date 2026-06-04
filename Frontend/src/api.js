@@ -1,9 +1,17 @@
 const DEFAULT_DEV_API = "http://localhost:5001/api/users";
 const DEFAULT_PROD_API = "http://100.29.211.141:5001/api/users";
+const USERS_PATH = "/api/users";
 
-const API_BASE_URL =
+function resolveApiBaseUrl(url) {
+  const trimmed = url.trim().replace(/\/+$/, "");
+  if (trimmed.endsWith(USERS_PATH)) return trimmed;
+  return `${trimmed}${USERS_PATH}`;
+}
+
+const API_BASE_URL = resolveApiBaseUrl(
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? DEFAULT_DEV_API : DEFAULT_PROD_API);
+    (import.meta.env.DEV ? DEFAULT_DEV_API : DEFAULT_PROD_API)
+);
 
 async function handleResponse(response) {
   if (!response.ok) {
@@ -28,7 +36,7 @@ function normalizeEmployeeList(data) {
       ? ` Server replied: "${data.message}".`
       : "";
   throw new Error(
-    `Expected a list of employees from the API.${hint} Check that VITE_API_URL ends with /api/users (current: ${API_BASE_URL}).`
+    `Expected a list of employees from the API.${hint} Requested: ${API_BASE_URL}`
   );
 }
 
